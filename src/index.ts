@@ -2,7 +2,7 @@ import { AppDataSource } from "./data-source";
 import { Users } from "./entity/Users";
 import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
-import testInt from "./interfaces/testInt";
+
 const indexRouter = require("./routers/index");
 // import * as indexRouter from "./routers/index";
 console.log('11===========',indexRouter);
