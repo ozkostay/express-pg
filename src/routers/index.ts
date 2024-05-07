@@ -2,10 +2,14 @@ import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import { AppDataSource } from "./../data-source";
 import testInt from "../interfaces/testInt";
-import { getRepository } from "typeorm";
 import { Users } from "../entity/Users";
-import { verify } from "crypto";
-import { param, body, validationResult, matchedData } from "express-validator";
+import {
+  param,
+  body,
+  validationResult,
+  matchedData,
+  Result,
+} from "express-validator";
 
 const router = express.Router();
 
@@ -34,18 +38,17 @@ router.get("/raw", async (req: Request, res: Response) => {
 
 router.get(
   "/qbilder/:idparam",
-  param("idparam").isInt(),
+  param("idparam").trim().isInt().withMessage("your is not Integer!!!"),
   async (req: Request, res: Response) => {
     // Validation that :idparam is Integer
+    let data: { idparam?: number } = matchedData(req);
     const result = validationResult(req);
-    let data: { idparam?: number };
+
     if (!result.isEmpty()) {
-      data = matchedData(req);
-      return res
-        .status(200)
-        .json(`Hello!!! param=${data.idparam} it doesn't have to be a string!`);
+      return res.status(200).json(result.array());
     }
 
+    console.log("44444", data.idparam);
     const users = await AppDataSource.createQueryBuilder()
       .select()
       .from(Users, "us")
